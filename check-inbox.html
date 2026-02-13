@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check Your Email | SaaS Product</title>
+
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --primary-hover: #1e4fd8;
+        --text-dark: #1f2937;
+        --text-light: #6b7280;
+        --border-color: #e5e7eb;
+        --background-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--background-gradient);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Header (IDENTICO al login) */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .language-selector select {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background: white;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    /* Center container */
+    .container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* Card (MISMO estilo que login-card) */
+    .login-card {
+        background: white;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+
+    .icon {
+        margin-bottom: 20px;
+    }
+
+    .icon svg {
+        width: 42px;
+        height: 42px;
+        stroke: var(--primary-color);
+    }
+
+    .title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 15px;
+    }
+
+    .description {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        margin-bottom: 30px;
+    }
+
+    .login-button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background-color: var(--primary-color);
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .login-button:hover {
+        background-color: var(--primary-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+        .header {
+            padding: 15px 20px;
+        }
+
+        .login-card {
+            padding: 30px 20px;
+        }
+
+        .title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo" data-i18n="logo">MyProduct</div>
+
+    <div class="language-selector">
+        <select id="languageSwitcher">
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+        </select>
+    </div>
+</header>
+
+<div class="container">
+    <div class="login-card">
+
+        <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 6h18M3 6l9 7 9-7M3 6v12h18V6" />
+            </svg>
+        </div>
+
+        <div class="title" data-i18n="title">
+            Check your email
+        </div>
+
+        <div class="description" data-i18n="description">
+            We have sent you instructions to reset your password.
+        </div>
+
+        <button class="login-button"
+                onclick="window.location.href='login.html'"
+                data-i18n="backToLogin">
+            Back to login
+        </button>
+
+    </div>
+</div>
+
+<script>
+/* ===============================
+   Translations Object
+================================= */
+const translations = {
+    en: {
+        logo: "MyProduct",
+        title: "Check your inbox",
+        description: "We have sent you instructions to reset your password.",
+        backToLogin: "Back to login"
+    },
+    es: {
+        logo: "MiProducto",
+        title: "Revisa tu correo",
+        description: "Te hemos enviado instrucciones para restablecer la contraseña.",
+        backToLogin: "Volver al inicio de sesión"
+    }
+};
+
+/* ===============================
+   Language Logic (IDENTICA AL LOGIN)
+================================= */
+
+const languageSwitcher = document.getElementById("languageSwitcher");
+
+function detectBrowserLanguage() {
+    const browserLang = navigator.language || navigator.userLanguage;
+    return browserLang.startsWith("es") ? "es" : "en";
+}
+
+function getInitialLanguage() {
+    const savedLang = localStorage.getItem("preferredLanguage");
+    if (savedLang) return savedLang;
+    return detectBrowserLanguage();
+}
+
+function applyTranslations(lang) {
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+        }
+    });
+
+    languageSwitcher.value = lang;
+}
+
+function setLanguage(lang, save = true) {
+    applyTranslations(lang);
+    if (save) {
+        localStorage.setItem("preferredLanguage", lang);
+    }
+}
+
+/* ===============================
+   Initialization
+================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const initialLang = getInitialLanguage();
+    setLanguage(initialLang, false);
+});
+
+languageSwitcher.addEventListener("change", (e) => {
+    setLanguage(e.target.value, true);
+});
+</script>
+
+</body>
+</html>

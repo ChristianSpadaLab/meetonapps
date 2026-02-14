@@ -1,292 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login | SaaS Product</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SaaS Product</title>
 
-<style>
-    :root {
-        --primary-color: #2563eb;
-        --primary-hover: #1e4fd8;
-        --text-dark: #1f2937;
-        --text-light: #6b7280;
-        --border-color: #e5e7eb;
-        --background-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
-    }
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1e4fd8;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --background-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
+        }
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: var(--background-gradient);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* Header */
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 40px;
-    }
-
-    .logo {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--text-dark);
-    }
-
-    .language-selector select {
-        padding: 6px 10px;
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
-        background: white;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
-    /* Center container */
-    .container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    /* Login Card */
-    .login-card {
-        background: white;
-        padding: 40px;
-        width: 100%;
-        max-width: 400px;
-        border-radius: 14px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .subtitle {
-        font-size: 0.9rem;
-        color: var(--text-light);
-        margin-bottom: 8px;
-    }
-
-    .title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 30px;
-    }
-
-    .form-group {
-        margin-bottom: 18px;
-    }
-
-    label {
-        font-size: 0.85rem;
-        color: var(--text-dark);
-        display: block;
-        margin-bottom: 6px;
-    }
-
-    input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        font-size: 0.95rem;
-        transition: border 0.2s;
-    }
-
-    input:focus {
-        outline: none;
-        border-color: var(--primary-color);
-    }
-
-    .forgot-password {
-        text-align: right;
-        font-size: 0.85rem;
-        margin-bottom: 20px;
-    }
-
-    .forgot-password a {
-        color: var(--primary-color);
-        text-decoration: none;
-    }
-
-    .forgot-password a:hover {
-        text-decoration: underline;
-    }
-
-    .login-button {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: none;
-        background-color: var(--primary-color);
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .login-button:hover {
-        background-color: var(--primary-hover);
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
         .header {
-            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .language-selector select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .login-card {
-            padding: 30px 20px;
+            background: white;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
         }
 
         .title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 30px;
         }
-    }
-</style>
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .forgot-password {
+            text-align: right;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #errorMessage {
+            color: #f87171;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header class="header">
-    <div class="logo" data-i18n="logo">MyProduct</div>
+    <header class="header">
+        <div class="logo" data-i18n="logo">MyProduct</div>
 
-    <div class="language-selector">
-        <select id="languageSwitcher">
-            <option value="en">EN</option>
-            <option value="es">ES</option>
-        </select>
+        <div class="language-selector">
+            <select id="languageSwitcher">
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="subtitle" data-i18n="subtitle">
+                Welcome back
+            </div>
+
+            <div class="title" data-i18n="title">
+                Sign in to your account
+            </div>
+
+            <div class="form-group">
+                <label for="email" data-i18n="emailLabel">Email Address</label>
+                <input type="email" id="email" data-i18n-placeholder="emailPlaceholder" placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password" data-i18n="passwordLabel">Password</label>
+                <input type="password" id="password" data-i18n-placeholder="passwordPlaceholder"
+                    placeholder="Enter your password">
+            </div>
+
+            <div class="forgot-password">
+                <a href="forgot-password.html" data-i18n="forgotPassword">Forgot your password?</a>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div id="errorMessage"></div>
+
+            <button class="login-button" data-i18n="loginButton">
+                Sign In
+            </button>
+        </div>
     </div>
-</header>
 
-<div class="container">
-    <div class="login-card">
-        <div class="subtitle" data-i18n="subtitle">
-            Welcome back
-        </div>
+    <script>
+        /* ===============================
+           Translations Object
+        ================================= */
+        const translations = {
+            en: {
+                logo: "MyProduct",
+                subtitle: "Welcome back",
+                title: "Sign in to your account",
+                emailLabel: "Email Address",
+                emailPlaceholder: "Enter your email",
+                passwordLabel: "Password",
+                passwordPlaceholder: "Enter your password",
+                forgotPassword: "Forgot your password?",
+                loginButton: "Sign In",
+                loginError: "Incorrect email or password. Please try again."
+            },
+            es: {
+                logo: "MiProducto",
+                subtitle: "Bienvenido de nuevo",
+                title: "Inicia sesión en tu cuenta",
+                emailLabel: "Correo electrónico",
+                emailPlaceholder: "Ingresa tu correo",
+                passwordLabel: "Contraseña",
+                passwordPlaceholder: "Ingresa tu contraseña",
+                forgotPassword: "¿Olvidó su contraseña?",
+                loginButton: "Iniciar sesión",
+                loginError: "Correo o contraseña incorrectos. Por favor, intente nuevamente."
+            }
+        };
 
-        <div class="title" data-i18n="title">
-            Sign in to your account
-        </div>
+        /* ===============================
+           Language Logic
+        ================================= */
+        const languageSwitcher = document.getElementById("languageSwitcher");
+        const errorMessage = document.getElementById("errorMessage");
+        let loginErrorVisible = false; // ❌ Indicador de error activo
 
-        <div class="form-group">
-            <label for="email" data-i18n="emailLabel">Email Address</label>
-            <input type="email" id="email" data-i18n-placeholder="emailPlaceholder" placeholder="Enter your email">
-        </div>
-
-        <div class="form-group">
-            <label for="password" data-i18n="passwordLabel">Password</label>
-            <input type="password" id="password" data-i18n-placeholder="passwordPlaceholder" placeholder="Enter your password">
-        </div>
-
-        <div class="forgot-password">
-            <a href="forgot-password.html" data-i18n="forgotPassword">Forgot your password?</a>
-        </div>
-
-        <button class="login-button" data-i18n="loginButton">
-            Sign In
-        </button>
-    </div>
-</div>
-
-<script>
-/* ===============================
-   Translations Object
-================================= */
-const translations = {
-    en: {
-        logo: "MyProduct",
-        subtitle: "Welcome back",
-        title: "Sign in to your account",
-        emailLabel: "Email Address",
-        emailPlaceholder: "Enter your email",
-        passwordLabel: "Password",
-        passwordPlaceholder: "Enter your password",
-        forgotPassword: "Forgot your password?",
-        loginButton: "Sign In"
-    },
-    es: {
-        logo: "MiProducto",
-        subtitle: "Bienvenido de nuevo",
-        title: "Inicia sesión en tu cuenta",
-        emailLabel: "Correo electrónico",
-        emailPlaceholder: "Ingresa tu correo",
-        passwordLabel: "Contraseña",
-        passwordPlaceholder: "Ingresa tu contraseña",
-        forgotPassword: "¿Olvidó su contraseña?",
-        loginButton: "Iniciar sesión"
-    }
-};
-
-/* ===============================
-   Language Logic
-================================= */
-
-const languageSwitcher = document.getElementById("languageSwitcher");
-
-function detectBrowserLanguage() {
-    const browserLang = navigator.language || navigator.userLanguage;
-    return browserLang.startsWith("es") ? "es" : "en";
-}
-
-function getInitialLanguage() {
-    const savedLang = localStorage.getItem("preferredLanguage");
-    if (savedLang) return savedLang;
-    return detectBrowserLanguage();
-}
-
-function applyTranslations(lang) {
-    document.documentElement.lang = lang;
-
-    document.querySelectorAll("[data-i18n]").forEach(element => {
-        const key = element.getAttribute("data-i18n");
-        if (translations[lang][key]) {
-            element.textContent = translations[lang][key];
+        function detectBrowserLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            return browserLang.startsWith("es") ? "es" : "en";
         }
-    });
 
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
-        const key = element.getAttribute("data-i18n-placeholder");
-        if (translations[lang][key]) {
-            element.setAttribute("placeholder", translations[lang][key]);
+        function getInitialLanguage() {
+            const savedLang = localStorage.getItem("preferredLanguage");
+            if (savedLang) return savedLang;
+            return detectBrowserLanguage();
         }
-    });
 
-    languageSwitcher.value = lang;
-}
+        function applyTranslations(lang) {
+            document.documentElement.lang = lang;
 
-function setLanguage(lang, save = true) {
-    applyTranslations(lang);
-    if (save) {
-        localStorage.setItem("preferredLanguage", lang);
-    }
-}
+            document.querySelectorAll("[data-i18n]").forEach(element => {
+                const key = element.getAttribute("data-i18n");
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
 
-/* ===============================
-   Initialization
-================================= */
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+                const key = element.getAttribute("data-i18n-placeholder");
+                if (translations[lang][key]) {
+                    element.setAttribute("placeholder", translations[lang][key]);
+                }
+            });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const initialLang = getInitialLanguage();
-    setLanguage(initialLang, false);
-});
+            // Actualiza título de pestaña
+            if (translations[lang].title) {
+                document.title = `${translations[lang].title} | SaaS Product`;
+            }
 
-languageSwitcher.addEventListener("change", (e) => {
-    setLanguage(e.target.value, true);
-});
-</script>
+            // ❌ Actualiza mensaje de error si está visible
+            if (loginErrorVisible) {
+                errorMessage.textContent = translations[lang].loginError;
+            }
+
+            languageSwitcher.value = lang;
+        }
+
+        function setLanguage(lang, save = true) {
+            applyTranslations(lang);
+            if (save) {
+                localStorage.setItem("preferredLanguage", lang);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const initialLang = getInitialLanguage();
+            setLanguage(initialLang, false);
+        });
+
+        languageSwitcher.addEventListener("change", (e) => {
+            setLanguage(e.target.value, true);
+        });
+
+        /* ===============================
+           LOGIN SIMULADO - USUARIO DE PRUEBA
+           COMIENZO
+        ================================= */
+        const dummyUser = {
+            email: "usuario@ejemplo.com",
+            password: "123456"
+        };
+
+        const loginButton = document.querySelector(".login-button");
+
+        loginButton.addEventListener("click", (e) => {
+            e.preventDefault(); // Evita recargar la página
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const currentLang = languageSwitcher.value;
+
+            if (email === dummyUser.email && password === dummyUser.password) {
+                errorMessage.style.display = "none";
+                loginErrorVisible = false;
+                alert("Login exitoso!");
+            } else {
+                errorMessage.textContent = translations[currentLang].loginError;
+                errorMessage.style.display = "block";
+                loginErrorVisible = true;
+            }
+        });
+        /* ===============================
+           LOGIN SIMULADO - USUARIO DE PRUEBA
+           FIN
+        ================================= */
+    </script>
 
 </body>
+
 </html>

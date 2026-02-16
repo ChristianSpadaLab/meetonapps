@@ -364,7 +364,7 @@
        🌐 SISTEMA DE IDIOMA
     ================================= */
     function setLanguage(lang) {
-      localStorage.setItem("lang", lang);
+      localStorage.setItem("preferredLanguage", lang);
       applyLanguage(lang);
       document.querySelector(".language-select").value = lang;
     }
@@ -379,8 +379,12 @@
     }
 
     function detectLanguage() {
-      const saved = localStorage.getItem("lang");
-      if (saved) return saved;
+      const saved = localStorage.getItem("preferredLanguage");
+
+      if (saved === "en" || saved === "es") {
+        return saved;
+      }
+
       return navigator.language.startsWith("es") ? "es" : "en";
     }
     /* ===============================
@@ -404,7 +408,7 @@
     function toggleUserMenu() {
       document.getElementById("userDropdown").classList.toggle("open");
     }
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
       const menu = document.querySelector(".user-menu");
       if (!menu.contains(e.target)) {
         document.getElementById("userDropdown").classList.remove("open");

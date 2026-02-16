@@ -305,9 +305,9 @@
         });
 
         /* ===============================
-           LOGIN SIMULADO - USUARIO DE PRUEBA
-           COMIENZO
-        ================================= */
+          LOGIN SIMULADO - USUARIO DE PRUEBA
+          COMIENZO
+       ================================= */
         const dummyUser = {
             email: "usuario@ejemplo.com",
             password: "123456"
@@ -325,7 +325,13 @@
             if (email === dummyUser.email && password === dummyUser.password) {
                 errorMessage.style.display = "none";
                 loginErrorVisible = false;
-                alert("Login exitoso!");
+
+                // 🔹 Guardar sesión simulada
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userEmail", email);
+
+                // 🔹 Redirige al dashboard
+                window.location.href = "dashboard.html";
             } else {
                 errorMessage.textContent = translations[currentLang].loginError;
                 errorMessage.style.display = "block";

@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard | SaaS Product</title>
+  <title>Event Types | SaaS Product</title>
+
   <style>
     :root {
       --primary-color: #2563eb;
@@ -72,11 +73,6 @@
       cursor: pointer;
     }
 
-    .language-select:hover {
-      background: rgba(37, 99, 235, 0.08);
-    }
-
-    /* HAMBURGER (mobile only) */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -88,7 +84,6 @@
       width: 22px;
       height: 2px;
       background: var(--text-color);
-      transition: var(--transition);
     }
 
     /* USER MENU */
@@ -119,23 +114,6 @@
 
     .user-dropdown.open {
       display: flex;
-    }
-
-    .user-name {
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
-
-    .user-email {
-      font-size: 0.75rem;
-      color: var(--muted-text);
-      margin-bottom: 0.625rem;
-    }
-
-    .dropdown-divider {
-      height: 0.0625rem;
-      background: var(--border-color);
-      margin: 0.625rem 0;
     }
 
     .dropdown-item {
@@ -171,23 +149,11 @@
       gap: 0.375rem;
     }
 
-    .sidebar-bottom {
-      margin-bottom: 0.625rem;
-    }
-
-    .sidebar-divider {
-      height: 0.0625rem;
-      background: var(--border-color);
-      margin: 0.75rem 0;
-    }
-
     .menu-item {
       padding: 0.625rem 0.75rem;
       border-radius: var(--radius-input);
       cursor: pointer;
       font-size: 0.875rem;
-
-      /* 🔹 Agregar estas 3 líneas */
       text-decoration: none;
       color: inherit;
       display: block;
@@ -203,7 +169,6 @@
       font-weight: 500;
     }
 
-    /* OVERLAY (mobile) */
     .sidebar-overlay {
       display: none;
       position: fixed;
@@ -237,53 +202,96 @@
       margin-bottom: 2rem;
     }
 
-    /* STATS */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.25rem;
-      margin-bottom: 2rem;
+    /* BUTTON */
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-input);
+      cursor: pointer;
+      font-size: 0.875rem;
     }
 
-    .stat-card {
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* GRID */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .event-card {
       background: var(--card-bg);
       padding: 1.5rem;
       border-radius: var(--radius-card);
       box-shadow: var(--shadow-sm);
     }
 
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--muted-text);
+    .event-name {
+      font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 600;
+    .event-info {
+      font-size: 0.8125rem;
+      color: var(--muted-text);
+      margin-bottom: 0.25rem;
     }
 
-    .popular-card {
+    .card-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-small {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: var(--radius-input);
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: white;
+    }
+
+    .btn-danger {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .empty-state {
       background: var(--card-bg);
       padding: 2rem;
       border-radius: var(--radius-card);
       box-shadow: var(--shadow-sm);
+      text-align: center;
+      color: var(--muted-text);
     }
 
-    .popular-time {
-      font-size: 2.5rem;
-      font-weight: 600;
-      margin: 0.75rem 0;
+    /* MODAL */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
     }
 
-    /* ===============================
-       📱 RESPONSIVE MOBILE
-    ================================= */
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-md);
+    }
+
     @media (max-width: 768px) {
-
-      body {
-        overflow: auto;
-      }
 
       .hamburger {
         display: flex;
@@ -303,7 +311,7 @@
         padding: 1.25rem;
       }
 
-      .stats-grid {
+      .events-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -312,12 +320,11 @@
 
 <body>
 
+  <!-- HEADER -->
   <div class="header">
     <div style="display:flex; align-items:center; gap:1rem;">
       <div class="hamburger" onclick="toggleSidebar()">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </div>
       <div class="app-name" data-i18n="appName">MyProduct</div>
     </div>
@@ -331,10 +338,6 @@
       <div class="user-menu">
         <div class="avatar" onclick="toggleUserMenu()"></div>
         <div class="user-dropdown" id="userDropdown">
-          <div class="user-name">John Doe</div>
-          <div class="user-email" id="userEmail"></div>
-          <div class="dropdown-divider"></div>
-          <div class="dropdown-item" data-i18n="settings">Settings</div>
           <div class="dropdown-item" data-i18n="logout" onclick="logout()">Log out</div>
         </div>
       </div>
@@ -343,113 +346,95 @@
 
   <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-top">
-      <div class="menu-item active" data-i18n="dashboard">Dashboard</div>
-      <a href="event-types.html" class="menu-item" data-i18n="eventTypes">
-        Event Types
-      </a>
+      <a href="dashboard.html" class="menu-item" data-i18n="dashboard">Dashboard</a>
+      <a href="event-types.html" class="menu-item active" data-i18n="eventTypes">Event Types</a>
       <div class="menu-item" data-i18n="appointments">Appointments</div>
       <div class="menu-item" data-i18n="calendar">Calendar</div>
       <div class="menu-item" data-i18n="availability">Availability</div>
     </div>
-    <div class="sidebar-bottom">
-      <div class="sidebar-divider"></div>
-      <div class="menu-item" data-i18n="feedback">Give feedback</div>
-    </div>
   </div>
 
+  <!-- MAIN -->
   <div class="main">
-    <div class="page-title" data-i18n="dashboardTitle">Dashboard Overview</div>
-    <div class="page-subtitle" data-i18n="dashboardSubtitle"> Summary of your scheduling activity </div>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label" data-i18n="totalEvents">Total Event Types</div>
-        <div class="stat-value">3</div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div class="page-title" data-i18n="eventTypesTitle">Event Types</div>
+        <div class="page-subtitle" data-i18n="eventTypesSubtitle">
+          Manage the types of events your clients can book
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" data-i18n="booked">Booked Appointments</div>
-        <div class="stat-value">24</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label" data-i18n="completed">Completed</div>
-        <div class="stat-value">18</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label" data-i18n="cancelled">Cancelled</div>
-        <div class="stat-value">6</div>
-      </div>
+      <button class="btn-primary" onclick="openModal()" data-i18n="createEvent">
+        Create New Event Type
+      </button>
     </div>
 
-    <div class="popular-card">
-      <div class="stat-label" data-i18n="popularTime">Most Popular Time</div>
-      <div class="popular-time">10:00 AM</div>
-      <div class="page-subtitle" data-i18n="popularTimeSub"> Based on all booked appointments </div>
+    <div id="eventsContainer" class="events-grid" style="margin-top:2rem;"></div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <h3 data-i18n="createEvent"></h3>
+      <br>
+      <input id="eventName" placeholder="Event name" style="margin-bottom:1rem; width:100%; padding:0.6rem;">
+      <input id="eventDuration" placeholder="30min / 1h / 1.5h" style="margin-bottom:1rem; width:100%; padding:0.6rem;">
+      <select id="eventLocation" style="margin-bottom:1rem; width:100%; padding:0.6rem;">
+        <option>Video Call</option>
+        <option>Phone Call</option>
+        <option>In Person</option>
+      </select>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-small" onclick="closeModal()" data-i18n="cancel">Cancel</button>
+        <button class="btn-primary" onclick="saveEvent()" data-i18n="save">Save</button>
+      </div>
     </div>
   </div>
 
   <script>
-    /* ===============================
-       🔐 PROTECCIÓN DE SESIÓN
-    ================================= */
     function checkAuth() {
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-      if (!isLoggedIn) {
+      if (!localStorage.getItem("isLoggedIn")) {
         window.location.href = "login.html";
       }
     }
     checkAuth();
 
-    /* ===============================
-       🌍 TRADUCCIONES
-    ================================= */
     const translations = {
       en: {
-        pageTitle: "Dashboard",
+        pageTitle: "Event Types",
         appName: "MyProduct",
         dashboard: "Dashboard",
-        dashboardTitle: "Dashboard Overview",
-        dashboardSubtitle: "Summary of your scheduling activity",
-        totalEvents: "Total Event Types",
-        booked: "Booked Appointments",
-        completed: "Completed",
-        cancelled: "Cancelled",
-        popularTime: "Most Popular Time",
-        popularTimeSub: "Based on all booked appointments",
         eventTypes: "Event Types",
         appointments: "Appointments",
         calendar: "Calendar",
         availability: "Availability",
-        settings: "Settings",
-        logout: "Log out",
-        feedback: "Give feedback"
+        eventTypesTitle: "Event Types",
+        eventTypesSubtitle: "Manage the types of events your clients can book",
+        createEvent: "Create New Event Type",
+        cancel: "Cancel",
+        save: "Save",
+        logout: "Log out"
       },
       es: {
-        pageTitle: "Inicio",
+        pageTitle: "Tipos de eventos",
         appName: "MyProduct",
         dashboard: "Inicio",
-        dashboardTitle: "Resumen general",
-        dashboardSubtitle: "Resumen de tu actividad de reservas",
-        totalEvents: "Total de tipos de evento",
-        booked: "Citas reservadas",
-        completed: "Citas realizadas",
-        cancelled: "Citas canceladas",
-        popularTime: "Horario más popular",
-        popularTimeSub: "Basado en todas las citas reservadas",
         eventTypes: "Tipos de eventos",
         appointments: "Citas",
         calendar: "Calendario",
         availability: "Disponibilidad",
-        settings: "Configuración",
-        logout: "Cerrar sesión",
-        feedback: "Dar feedback"
+        eventTypesTitle: "Tipos de eventos",
+        eventTypesSubtitle: "Administra los tipos de eventos que tus clientes pueden reservar",
+        createEvent: "Crear nuevo tipo de evento",
+        cancel: "Cancelar",
+        save: "Guardar",
+        logout: "Cerrar sesión"
       }
     };
 
-    /* ===============================
-       🌐 SISTEMA DE IDIOMA
-    ================================= */
     function setLanguage(lang) {
       localStorage.setItem("preferredLanguage", lang);
       applyLanguage(lang);
@@ -459,62 +444,89 @@
     function applyLanguage(lang) {
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        el.textContent = translations[lang][key];
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
       });
       document.title = translations[lang].pageTitle + " | SaaS Product";
     }
 
     function detectLanguage() {
-      const saved = localStorage.getItem("preferredLanguage");
-      if (saved === "en" || saved === "es") return saved;
-      return navigator.language.startsWith("es") ? "es" : "en";
-    }
-
-    /* ===============================
-       👤 USUARIO
-    ================================= */
-    function loadUserData() {
-      const email = localStorage.getItem("userEmail");
-      if (email) {
-        document.getElementById("userEmail").textContent = email;
-      }
+      return localStorage.getItem("preferredLanguage") || "en";
     }
 
     function logout() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("userEmail");
+      localStorage.clear();
       window.location.href = "login.html";
     }
 
-    /* ===============================
-       📂 MENÚ USUARIO
-    ================================= */
     function toggleUserMenu() {
       document.getElementById("userDropdown").classList.toggle("open");
     }
 
-    document.addEventListener("click", function (e) {
-      const menu = document.querySelector(".user-menu");
-      if (!menu.contains(e.target)) {
-        document.getElementById("userDropdown").classList.remove("open");
-      }
-    });
-
-    /* ===============================
-       📱 SIDEBAR MOBILE
-    ================================= */
     function toggleSidebar() {
       document.querySelector(".sidebar").classList.toggle("open");
       document.querySelector(".sidebar-overlay").classList.toggle("active");
     }
 
-    /* ===============================
-       🚀 INICIALIZACIÓN
-    ================================= */
-    loadUserData();
+    /* EVENTS */
+    let events = JSON.parse(localStorage.getItem("eventTypes")) || [];
+
+    function renderEvents() {
+      const container = document.getElementById("eventsContainer");
+      container.innerHTML = "";
+
+      if (events.length === 0) {
+        container.innerHTML = `<div class="empty-state">No event types created yet</div>`;
+        return;
+      }
+
+      events.forEach((e, index) => {
+        container.innerHTML += `
+          <div class="event-card">
+            <div class="event-name">${e.name}</div>
+            <div class="event-info">${e.duration}</div>
+            <div class="event-info">${e.location}</div>
+            <div class="card-actions">
+              <button class="btn-small" onclick="deleteEvent(${index})">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function openModal() {
+      document.getElementById("eventModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("eventModal").style.display = "none";
+    }
+
+    function saveEvent() {
+      const name = document.getElementById("eventName").value;
+      const duration = document.getElementById("eventDuration").value;
+      const location = document.getElementById("eventLocation").value;
+
+      if (!name) return;
+
+      events.push({ name, duration, location });
+      localStorage.setItem("eventTypes", JSON.stringify(events));
+      renderEvents();
+      closeModal();
+    }
+
+    function deleteEvent(index) {
+      events.splice(index, 1);
+      localStorage.setItem("eventTypes", JSON.stringify(events));
+      renderEvents();
+    }
+
     const lang = detectLanguage();
     applyLanguage(lang);
     document.querySelector(".language-select").value = lang;
+
+    renderEvents();
   </script>
 
 </body>

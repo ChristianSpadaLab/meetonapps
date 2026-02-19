@@ -394,6 +394,20 @@
     </div>
   </div>
 
+  <!-- CONFIRM DELETE MODAL -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <h3 data-i18n="confirmTitle">Confirm</h3>
+      <br>
+      <p id="confirmMessage"></p>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+        <button class="btn-small" onclick="closeConfirmModal()" data-i18n="cancel">Cancel</button>
+        <button class="btn-small btn-danger" onclick="confirmDelete()" data-i18n="delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     function checkAuth() {
       if (!localStorage.getItem("isLoggedIn")) {
@@ -416,6 +430,12 @@
         createEvent: "Create New Event Type",
         cancel: "Cancel",
         save: "Save",
+        delete: "Delete",
+        editEvent: "Edit Event Type",
+        noEvents: "No event types created yet",
+        confirmTitle: "Confirm",
+        confirmDelete: "Are you sure you want to delete this event type?",
+        edit: "Edit",
         logout: "Log out"
       },
       es: {
@@ -431,6 +451,12 @@
         createEvent: "Crear nuevo tipo de evento",
         cancel: "Cancelar",
         save: "Guardar",
+        delete: "Eliminar",
+        editEvent: "Editar Tipo de evento",
+        noEvents: "Aún no hay tipos de eventos creados",
+        confirmTitle: "Confirmar",
+        confirmDelete: "¿Estás seguro de que quieres eliminar este tipo de evento?",
+        edit: "Editar",
         logout: "Cerrar sesión"
       }
     };
@@ -439,6 +465,7 @@
       localStorage.setItem("preferredLanguage", lang);
       applyLanguage(lang);
       document.querySelector(".language-select").value = lang;
+      renderEvents(); // 🔥 vuelve a renderizar para traducir contenido dinámico
     }
 
     function applyLanguage(lang) {
@@ -469,38 +496,81 @@
       document.querySelector(".sidebar-overlay").classList.toggle("active");
     }
 
-    /* EVENTS */
+    /* ===============================
+       EVENTS
+    ================================= */
+
     let events = JSON.parse(localStorage.getItem("eventTypes")) || [];
+    let editingIndex = null;
 
     function renderEvents() {
       const container = document.getElementById("eventsContainer");
       container.innerHTML = "";
 
+      const lang = detectLanguage();
+
       if (events.length === 0) {
-        container.innerHTML = `<div class="empty-state">No event types created yet</div>`;
+        container.innerHTML = `
+        <div class="empty-state">
+          ${translations[lang].noEvents}
+        </div>
+      `;
         return;
       }
 
       events.forEach((e, index) => {
         container.innerHTML += `
-          <div class="event-card">
-            <div class="event-name">${e.name}</div>
-            <div class="event-info">${e.duration}</div>
-            <div class="event-info">${e.location}</div>
-            <div class="card-actions">
-              <button class="btn-small" onclick="deleteEvent(${index})">Delete</button>
-            </div>
-          </div>
-        `;
+        <div class="event-card">
+          <div class="event-name">${e.name}</div>
+          <div class="event-info">${e.duration}</div>
+          <div class="event-info">${e.location}</div>
+         <div class="card-actions">
+  <button class="btn-small" onclick="editEvent(${index})">
+  ${translations[lang].edit}
+</button>
+  <button class="btn-small btn-danger" onclick="deleteEvent(${index})">
+    ${translations[lang].delete}
+  </button>
+</div>
+        </div>
+      `;
       });
     }
 
-    function openModal() {
-      document.getElementById("eventModal").style.display = "flex";
+    function editEvent(index) {
+      openModal(index);
+    }
+
+    function openModal(index = null) {
+
+      editingIndex = index;
+
+      const modal = document.getElementById("eventModal");
+      modal.style.display = "flex";
+
+      const lang = detectLanguage();
+      const title = modal.querySelector("h3");
+
+      if (index !== null) {
+        title.textContent = translations[lang].editEvent;
+      } else {
+        title.textContent = translations[lang].createEvent;
+      }
+      if (index !== null) {
+        const event = events[index];
+        document.getElementById("eventName").value = event.name;
+        document.getElementById("eventDuration").value = event.duration;
+        document.getElementById("eventLocation").value = event.location;
+      } else {
+        document.getElementById("eventName").value = "";
+        document.getElementById("eventDuration").value = "";
+        document.getElementById("eventLocation").value = "Video Call";
+      }
     }
 
     function closeModal() {
       document.getElementById("eventModal").style.display = "none";
+      editingIndex = null;
     }
 
     function saveEvent() {
@@ -510,22 +580,54 @@
 
       if (!name) return;
 
-      events.push({ name, duration, location });
+      if (editingIndex !== null) {
+        // EDITAR
+        events[editingIndex] = { name, duration, location };
+      } else {
+        // CREAR
+        events.push({ name, duration, location });
+      }
+
       localStorage.setItem("eventTypes", JSON.stringify(events));
+
       renderEvents();
       closeModal();
     }
 
+    let deleteIndex = null;
+
     function deleteEvent(index) {
-      events.splice(index, 1);
-      localStorage.setItem("eventTypes", JSON.stringify(events));
-      renderEvents();
+      deleteIndex = index;
+
+      const lang = detectLanguage();
+      document.getElementById("confirmMessage").textContent =
+        translations[lang].confirmDelete;
+
+      document.getElementById("confirmModal").style.display = "flex";
     }
+
+    function closeConfirmModal() {
+      document.getElementById("confirmModal").style.display = "none";
+      deleteIndex = null;
+    }
+
+    function confirmDelete() {
+      if (deleteIndex === null) return;
+
+      events.splice(deleteIndex, 1);
+      localStorage.setItem("eventTypes", JSON.stringify(events));
+
+      renderEvents();
+      closeConfirmModal();
+    }
+
+    /* ===============================
+       INIT
+    ================================= */
 
     const lang = detectLanguage();
     applyLanguage(lang);
     document.querySelector(".language-select").value = lang;
-
     renderEvents();
   </script>
 

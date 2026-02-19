@@ -169,6 +169,16 @@
       font-weight: 500;
     }
 
+    .sidebar-bottom {
+      margin-bottom: 0.625rem;
+    }
+
+    .sidebar-divider {
+      height: 0.0625rem;
+      background: var(--border-color);
+      margin: 0.75rem 0;
+    }
+
     .sidebar-overlay {
       display: none;
       position: fixed;
@@ -355,6 +365,11 @@
       <div class="menu-item" data-i18n="calendar">Calendar</div>
       <div class="menu-item" data-i18n="availability">Availability</div>
     </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+      <div class="menu-item" data-i18n="feedback">Give feedback</div>
+    </div>
   </div>
 
   <!-- MAIN -->
@@ -436,6 +451,7 @@
         confirmTitle: "Confirm",
         confirmDelete: "Are you sure you want to delete this event type?",
         edit: "Edit",
+        feedback: "Give feedback",
         logout: "Log out"
       },
       es: {
@@ -457,6 +473,7 @@
         confirmTitle: "Confirmar",
         confirmDelete: "¿Estás seguro de que quieres eliminar este tipo de evento?",
         edit: "Editar",
+        feedback: "Dar feedback",
         logout: "Cerrar sesión"
       }
     };

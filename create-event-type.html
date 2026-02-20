@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear Tipo de Evento | SaaS Product</title>
+
+<style>
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1e4fd8;
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
+  --card-bg: #ffffff;
+  --text-color: #111827;
+  --muted-text: #6b7280;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 0.375rem 1.125rem rgba(0, 0, 0, 0.08);
+  --radius-card: 0.875rem;
+  --radius-input: 0.5rem;
+  --transition: all 0.2s ease;
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  height:100vh;
+  display:flex;
+  overflow:hidden;
+}
+
+/* HEADER */
+.header {
+  position:fixed;
+  top:0; left:0; right:0;
+  height:4rem;
+  background:white;
+  box-shadow:var(--shadow-sm);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 1.5rem;
+  z-index:1000;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position:fixed;
+  top:4rem;
+  left:0;
+  width:15.625rem;
+  bottom:0;
+  background:var(--card-bg);
+  box-shadow:var(--shadow-sm);
+  padding:1.25rem;
+}
+
+.menu-item {
+  padding:0.625rem 0.75rem;
+  border-radius:var(--radius-input);
+  font-size:0.875rem;
+  text-decoration:none;
+  color:inherit;
+  display:block;
+  margin-bottom:0.25rem;
+}
+
+.menu-item:hover {
+  background:rgba(37,99,235,0.08);
+}
+
+.menu-item.active {
+  background:rgba(37,99,235,0.12);
+  color:var(--primary-color);
+  font-weight:500;
+}
+
+/* MAIN */
+.main {
+  margin-top:4rem;
+  margin-left:15.625rem;
+  padding:2.5rem;
+  width:100%;
+  overflow-y:auto;
+}
+
+.page-title {
+  font-size:1.5rem;
+  font-weight:600;
+  margin-bottom:0.25rem;
+}
+
+.page-subtitle {
+  font-size:0.875rem;
+  color:var(--muted-text);
+  margin-bottom:2rem;
+}
+
+/* CARD FORM */
+.form-card {
+  background:var(--card-bg);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-sm);
+  padding:2rem;
+  max-width:900px;
+}
+
+.section {
+  margin-bottom:2rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border-color);
+}
+
+.section:last-child {
+  border-bottom:none;
+}
+
+.section h2 {
+  font-size:0.75rem;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:var(--muted-text);
+  margin-bottom:1rem;
+}
+
+.field {
+  margin-bottom:1rem;
+}
+
+label {
+  display:block;
+  font-size:0.875rem;
+  margin-bottom:0.4rem;
+  font-weight:500;
+}
+
+input, select, textarea {
+  width:100%;
+  padding:0.6rem;
+  border:1px solid var(--border-color);
+  border-radius:var(--radius-input);
+  font-size:0.875rem;
+  transition:var(--transition);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline:none;
+  border-color:var(--primary-color);
+  box-shadow:0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.inline-group {
+  display:flex;
+  gap:0.5rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.hidden { display:none; }
+
+.btn-primary {
+  background:var(--primary-color);
+  color:white;
+  border:none;
+  padding:0.6rem 1rem;
+  border-radius:var(--radius-input);
+  cursor:pointer;
+  font-size:0.875rem;
+}
+
+.btn-primary:hover {
+  background:var(--primary-hover);
+}
+
+.btn-secondary {
+  background:white;
+  border:1px solid var(--border-color);
+  padding:0.6rem 1rem;
+  border-radius:var(--radius-input);
+  cursor:pointer;
+  font-size:0.875rem;
+}
+
+.actions {
+  display:flex;
+  justify-content:flex-end;
+  gap:0.5rem;
+  margin-top:1.5rem;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div style="font-weight:600;">MyProduct</div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <a href="dashboard.html" class="menu-item">Dashboard</a>
+  <a href="event-types.html" class="menu-item active">Event Types</a>
+  <div class="menu-item">Appointments</div>
+  <div class="menu-item">Calendar</div>
+  <div class="menu-item">Availability</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="page-title">Crear nuevo tipo de evento</div>
+  <div class="page-subtitle">
+    Configura los detalles y reglas de este tipo de evento
+  </div>
+
+  <div class="form-card">
+
+  <!-- ========================= -->
+            <!-- INFORMACIÓN GENERAL -->
+            <!-- ========================= -->
+            <div class="section">
+                <h2>Información general</h2>
+
+                <div class="field">
+                    <label>Nombre del evento *</label>
+                    <input type="text" placeholder="Introducir nombre del evento">
+                </div>
+
+                <div class="field">
+                    <label>Duración *</label>
+                    <select id="durationMode">
+                        <option value="minutes">Solo minutos</option>
+                        <option value="hours">Solo horas</option>
+                        <option value="both">Horas y minutos</option>
+                    </select>
+                    <div id="durationInputs" class="inline-group" style="margin-top:10px;"></div>
+                </div>
+
+                <div class="field">
+                    <label>Tiempo de espera entre reuniones</label>
+                    <div class="inline-group">
+                        <select id="bufferMinutes"></select>
+                        <span>minutos</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Tipo de evento *</label>
+                    <select id="eventType">
+                        <option value="">Seleccionar tipo</option>
+                        <option value="video">Videollamada</option>
+                        <option value="phone">Llamada telefónica</option>
+                        <option value="inperson">Presencial</option>
+                    </select>
+                </div>
+
+                <div id="dynamicSection" class="hidden"></div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- DESCRIPCIÓN -->
+            <!-- ========================= -->
+            <div class="section">
+                <h2>Descripción</h2>
+                <textarea rows="4" placeholder="Añadir una descripción para su evento"></textarea>
+            </div>
+
+            <!-- ========================= -->
+            <!-- DISPONIBILIDAD -->
+            <!-- ========================= -->
+            <div class="section">
+                <h2>Disponibilidad</h2>
+
+                <label><input type="radio" name="availability" value="default" checked> Usar disponibilidad
+                    predeterminada</label><br>
+                <label><input type="radio" name="availability" value="custom"> Personalizar disponibilidad</label>
+
+                <div id="customAvailability" class="hidden" style="margin-top:20px;"></div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- REGLAS DE PROGRAMACIÓN -->
+            <!-- ========================= -->
+            <div class="section">
+                <h2>Reglas de programación</h2>
+
+                <div class="field">
+                    <label>Tiempo mínimo de aviso *</label>
+                    <select id="noticeMode">
+                        <option value="hours">En horas</option>
+                        <option value="days">En días</option>
+                    </select>
+                    <div id="noticeInputs" class="inline-group" style="margin-top:10px;"></div>
+                </div>
+
+                <div class="field">
+                    <label>Rango máximo de reserva *</label>
+                    <div class="inline-group">
+                        <input type="number" min="1" max="90" value="30">
+                        <span>días</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Zona horaria</label>
+                    <input type="text" value="(GMT-03:00) Buenos Aires" disabled>
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- PRECIOS -->
+            <!-- ========================= -->
+            <div class="section">
+                <h2>Precios</h2>
+
+                <label>
+                    <input type="checkbox" id="paidToggle"> Evento de pago
+                </label>
+
+                <div id="priceSection" class="hidden">
+                    <div class="field">
+                        <label>Precio</label>
+                        <div class="price-input">
+                            <span>USD $</span>
+                            <input type="number" step="0.01" placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // GENERADOR SELECTS
+        function fillSelect(select, max) {
+            for (let i = 0; i <= max; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.text = i;
+                select.appendChild(option);
+            }
+        }
+        fillSelect(bufferMinutes, 60);
+        // DURACIÓN
+        function renderDuration() {
+            durationInputs.innerHTML = "";
+            if (durationMode.value === "minutes") {
+                let min = document.createElement("select");
+                fillSelect(min, 59);
+                durationInputs.appendChild(min);
+                durationInputs.innerHTML += "<span>minutos</span>";
+            }
+            if (durationMode.value === "hours") {
+                let hr = document.createElement("select");
+                fillSelect(hr, 23);
+                durationInputs.appendChild(hr);
+                durationInputs.innerHTML += "<span>horas</span>";
+            }
+            if (durationMode.value === "both") {
+                let hr = document.createElement("select");
+                fillSelect(hr, 23);
+                let min = document.createElement("select");
+                fillSelect(min, 59);
+                durationInputs.appendChild(hr);
+                durationInputs.innerHTML += "<span>horas</span>";
+                durationInputs.appendChild(min);
+                durationInputs.innerHTML += "<span>minutos</span>";
+            }
+        }
+        durationMode.addEventListener("change", renderDuration);
+        renderDuration();
+        // EVENTO DINÁMICO
+        eventType.addEventListener("change", () => {
+            dynamicSection.innerHTML = "";
+            if (!eventType.value) {
+                dynamicSection.classList.add("hidden");
+                return;
+            }
+            dynamicSection.classList.remove("hidden");
+            dynamicSection.classList.add("visible");
+            if (eventType.value === "video") {
+                dynamicSection.innerHTML = `
+<div class="field">
+<label>Enlace de la reunión *</label>
+<input type="text">
+</div>
+<div class="field">
+<label>Datos de acceso</label>
+<input type="text">
+</div>`;
+            }
+            if (eventType.value === "phone") {
+                dynamicSection.innerHTML = `
+<div class="field">
+<label>Número de teléfono *</label>
+<input type="text">
+</div>
+<div class="field">
+<label>Instrucciones adicionales</label>
+<input type="text">
+</div>`;
+            }
+            if (eventType.value === "inperson") {
+                dynamicSection.innerHTML = `
+<div class="field">
+<label>Dirección *</label>
+<input type="text">
+</div>
+<div class="field">
+<label>Detalles adicionales</label>
+<input type="text" placeholder="Piso, apartamento, referencias, etc.">
+</div>`;
+            }
+        });
+        // DISPONIBILIDAD PERSONALIZADA
+        const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        document.querySelectorAll('input[name="availability"]').forEach(r => {
+            r.addEventListener("change", () => {
+                if (r.value === "custom" && r.checked) {
+                    customAvailability.classList.remove("hidden");
+                    customAvailability.classList.add("visible");
+                    renderAvailability();
+                } else {
+                    customAvailability.classList.add("hidden");
+                    customAvailability.innerHTML = "";
+                }
+            });
+        });
+
+        function renderAvailability() {
+            customAvailability.innerHTML = "";
+            days.forEach(day => {
+                let block = document.createElement("div");
+                block.className = "day-block";
+                block.innerHTML = `
+<strong>${day}</strong>
+<div class="time-range">
+<input type="time">
+<input type="time">
+</div>
+<div class="add-slot">+ Añadir franja horaria</div>
+`;
+                block.querySelector(".add-slot").addEventListener("click", () => {
+                    let range = document.createElement("div");
+                    range.className = "time-range";
+                    range.innerHTML = `<input type="time"><input type="time">`;
+                    block.insertBefore(range, block.querySelector(".add-slot"));
+                });
+                customAvailability.appendChild(block);
+            });
+        }
+        // NOTICE
+        function renderNotice() {
+            noticeInputs.innerHTML = "";
+            if (noticeMode.value === "hours") {
+                let hr = document.createElement("select");
+                fillSelect(hr, 23);
+                let min = document.createElement("select");
+                fillSelect(min, 59);
+                noticeInputs.appendChild(hr);
+                noticeInputs.innerHTML += "<span>horas</span>";
+                noticeInputs.appendChild(min);
+                noticeInputs.innerHTML += "<span>minutos</span>";
+            }
+            if (noticeMode.value === "days") {
+                let day = document.createElement("select");
+                fillSelect(day, 30);
+                noticeInputs.appendChild(day);
+                noticeInputs.innerHTML += "<span>días</span>";
+            }
+        }
+        noticeMode.addEventListener("change", renderNotice);
+        renderNotice();
+        // PRECIO
+        paidToggle.addEventListener("change", () => {
+            if (paidToggle.checked) {
+                priceSection.classList.remove("hidden");
+                priceSection.classList.add("visible");
+            } else {
+                priceSection.classList.add("hidden");
+            }
+        });
+    </script>
+
+</body>
+</html>

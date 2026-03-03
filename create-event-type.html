@@ -344,157 +344,338 @@ input:focus, select:focus, textarea:focus {
         </div>
     </div>
 
-    <script>
-        // GENERADOR SELECTS
-        function fillSelect(select, max) {
-            for (let i = 0; i <= max; i++) {
-                let option = document.createElement("option");
-                option.value = i;
-                option.text = i;
-                select.appendChild(option);
-            }
-        }
-        fillSelect(bufferMinutes, 60);
-        // DURACIÓN
-        function renderDuration() {
-            durationInputs.innerHTML = "";
-            if (durationMode.value === "minutes") {
-                let min = document.createElement("select");
-                fillSelect(min, 59);
-                durationInputs.appendChild(min);
-                durationInputs.innerHTML += "<span>minutos</span>";
-            }
-            if (durationMode.value === "hours") {
-                let hr = document.createElement("select");
-                fillSelect(hr, 23);
-                durationInputs.appendChild(hr);
-                durationInputs.innerHTML += "<span>horas</span>";
-            }
-            if (durationMode.value === "both") {
-                let hr = document.createElement("select");
-                fillSelect(hr, 23);
-                let min = document.createElement("select");
-                fillSelect(min, 59);
-                durationInputs.appendChild(hr);
-                durationInputs.innerHTML += "<span>horas</span>";
-                durationInputs.appendChild(min);
-                durationInputs.innerHTML += "<span>minutos</span>";
-            }
-        }
-        durationMode.addEventListener("change", renderDuration);
-        renderDuration();
-        // EVENTO DINÁMICO
-        eventType.addEventListener("change", () => {
-            dynamicSection.innerHTML = "";
-            if (!eventType.value) {
-                dynamicSection.classList.add("hidden");
-                return;
-            }
-            dynamicSection.classList.remove("hidden");
-            dynamicSection.classList.add("visible");
-            if (eventType.value === "video") {
-                dynamicSection.innerHTML = `
-<div class="field">
-<label>Enlace de la reunión *</label>
-<input type="text">
-</div>
-<div class="field">
-<label>Datos de acceso</label>
-<input type="text">
-</div>`;
-            }
-            if (eventType.value === "phone") {
-                dynamicSection.innerHTML = `
-<div class="field">
-<label>Número de teléfono *</label>
-<input type="text">
-</div>
-<div class="field">
-<label>Instrucciones adicionales</label>
-<input type="text">
-</div>`;
-            }
-            if (eventType.value === "inperson") {
-                dynamicSection.innerHTML = `
-<div class="field">
-<label>Dirección *</label>
-<input type="text">
-</div>
-<div class="field">
-<label>Detalles adicionales</label>
-<input type="text" placeholder="Piso, apartamento, referencias, etc.">
-</div>`;
-            }
-        });
-        // DISPONIBILIDAD PERSONALIZADA
-        const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-        document.querySelectorAll('input[name="availability"]').forEach(r => {
-            r.addEventListener("change", () => {
-                if (r.value === "custom" && r.checked) {
-                    customAvailability.classList.remove("hidden");
-                    customAvailability.classList.add("visible");
-                    renderAvailability();
-                } else {
-                    customAvailability.classList.add("hidden");
-                    customAvailability.innerHTML = "";
-                }
-            });
-        });
+<script>
 
-        function renderAvailability() {
-            customAvailability.innerHTML = "";
-            days.forEach(day => {
-                let block = document.createElement("div");
-                block.className = "day-block";
-                block.innerHTML = `
-<strong>${day}</strong>
-<div class="time-range">
-<input type="time">
-<input type="time">
-</div>
-<div class="add-slot">+ Añadir franja horaria</div>
-`;
-                block.querySelector(".add-slot").addEventListener("click", () => {
-                    let range = document.createElement("div");
-                    range.className = "time-range";
-                    range.innerHTML = `<input type="time"><input type="time">`;
-                    block.insertBefore(range, block.querySelector(".add-slot"));
-                });
-                customAvailability.appendChild(block);
-            });
+    /* ================================
+       VARIABLES DOM
+    ================================= */
+
+    const bufferMinutes = document.getElementById("bufferMinutes");
+    const durationMode = document.getElementById("durationMode");
+    const durationInputs = document.getElementById("durationInputs");
+    const eventType = document.getElementById("eventType");
+    const dynamicSection = document.getElementById("dynamicSection");
+    const customAvailability = document.getElementById("customAvailability");
+    const noticeMode = document.getElementById("noticeMode");
+    const noticeInputs = document.getElementById("noticeInputs");
+    const paidToggle = document.getElementById("paidToggle");
+    const priceSection = document.getElementById("priceSection");
+
+    const nameInput = document.querySelector('input[type="text"]');
+    const descriptionInput = document.querySelector('textarea');
+
+    const cancelBtn = document.querySelector(".btn-secondary");
+    const saveBtn = document.querySelector(".btn-primary");
+
+    let formChanged = false;
+
+    const urlParams = new URLSearchParams(window.location.search);
+const editIndex = urlParams.get("edit");
+
+let events = JSON.parse(localStorage.getItem("eventTypes")) || [];
+let isEditMode = editIndex !== null;
+
+function loadEventForEdit() {
+
+    if (!isEditMode) return;
+
+    const event = events[editIndex];
+    if (!event) return;
+
+    nameInput.value = event.name;
+    descriptionInput.value = event.description || "";
+    eventType.value = event.location;
+
+    // Disparar evento para renderizar sección dinámica
+    eventType.dispatchEvent(new Event("change"));
+
+}
+
+    /* ================================
+       DETECTAR CAMBIOS
+    ================================= */
+
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+        el.addEventListener("change", () => {
+            formChanged = true;
+        });
+    });
+
+    /* ================================
+       GENERADOR SELECTS
+    ================================= */
+
+    function fillSelect(select, max) {
+        for (let i = 0; i <= max; i++) {
+            let option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            select.appendChild(option);
         }
-        // NOTICE
-        function renderNotice() {
-            noticeInputs.innerHTML = "";
-            if (noticeMode.value === "hours") {
-                let hr = document.createElement("select");
-                fillSelect(hr, 23);
-                let min = document.createElement("select");
-                fillSelect(min, 59);
-                noticeInputs.appendChild(hr);
-                noticeInputs.innerHTML += "<span>horas</span>";
-                noticeInputs.appendChild(min);
-                noticeInputs.innerHTML += "<span>minutos</span>";
-            }
-            if (noticeMode.value === "days") {
-                let day = document.createElement("select");
-                fillSelect(day, 30);
-                noticeInputs.appendChild(day);
-                noticeInputs.innerHTML += "<span>días</span>";
-            }
+    }
+
+    fillSelect(bufferMinutes, 60);
+
+    /* ================================
+       DURACIÓN
+    ================================= */
+
+    function renderDuration() {
+        durationInputs.innerHTML = "";
+
+        if (durationMode.value === "minutes") {
+            let min = document.createElement("select");
+            fillSelect(min, 59);
+            durationInputs.appendChild(min);
+            durationInputs.innerHTML += "<span> minutos</span>";
         }
-        noticeMode.addEventListener("change", renderNotice);
-        renderNotice();
-        // PRECIO
-        paidToggle.addEventListener("change", () => {
-            if (paidToggle.checked) {
-                priceSection.classList.remove("hidden");
-                priceSection.classList.add("visible");
+
+        if (durationMode.value === "hours") {
+            let hr = document.createElement("select");
+            fillSelect(hr, 23);
+            durationInputs.appendChild(hr);
+            durationInputs.innerHTML += "<span> horas</span>";
+        }
+
+        if (durationMode.value === "both") {
+            let hr = document.createElement("select");
+            fillSelect(hr, 23);
+            let min = document.createElement("select");
+            fillSelect(min, 59);
+            durationInputs.appendChild(hr);
+            durationInputs.innerHTML += "<span> horas </span>";
+            durationInputs.appendChild(min);
+            durationInputs.innerHTML += "<span> minutos</span>";
+        }
+    }
+
+    durationMode.addEventListener("change", renderDuration);
+    renderDuration();
+
+    /* ================================
+       EVENTO DINÁMICO
+    ================================= */
+
+    eventType.addEventListener("change", () => {
+
+        dynamicSection.innerHTML = "";
+
+        if (!eventType.value) {
+            dynamicSection.classList.add("hidden");
+            return;
+        }
+
+        dynamicSection.classList.remove("hidden");
+
+        if (eventType.value === "video") {
+            dynamicSection.innerHTML = `
+                <div class="field">
+                    <label>Enlace de la reunión *</label>
+                    <input type="text">
+                </div>
+                <div class="field">
+                    <label>Datos de acceso</label>
+                    <input type="text">
+                </div>`;
+        }
+
+        if (eventType.value === "phone") {
+            dynamicSection.innerHTML = `
+                <div class="field">
+                    <label>Número de teléfono *</label>
+                    <input type="text">
+                </div>
+                <div class="field">
+                    <label>Instrucciones adicionales</label>
+                    <input type="text">
+                </div>`;
+        }
+
+        if (eventType.value === "inperson") {
+            dynamicSection.innerHTML = `
+                <div class="field">
+                    <label>Dirección *</label>
+                    <input type="text">
+                </div>
+                <div class="field">
+                    <label>Detalles adicionales</label>
+                    <input type="text">
+                </div>`;
+        }
+
+    });
+
+    /* ================================
+       DISPONIBILIDAD PERSONALIZADA
+    ================================= */
+
+    const days = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+
+    document.querySelectorAll('input[name="availability"]').forEach(r => {
+        r.addEventListener("change", () => {
+            if (r.value === "custom" && r.checked) {
+                customAvailability.classList.remove("hidden");
+                renderAvailability();
             } else {
-                priceSection.classList.add("hidden");
+                customAvailability.classList.add("hidden");
+                customAvailability.innerHTML = "";
             }
         });
-    </script>
+    });
+
+    function renderAvailability() {
+        customAvailability.innerHTML = "";
+
+        days.forEach(day => {
+            let block = document.createElement("div");
+            block.className = "day-block";
+            block.innerHTML = `
+                <strong>${day}</strong>
+                <div class="time-range">
+                    <input type="time">
+                    <input type="time">
+                </div>
+                <div class="add-slot">+ Añadir franja horaria</div>
+            `;
+
+            block.querySelector(".add-slot").addEventListener("click", () => {
+                let range = document.createElement("div");
+                range.className = "time-range";
+                range.innerHTML = `<input type="time"><input type="time">`;
+                block.insertBefore(range, block.querySelector(".add-slot"));
+            });
+
+            customAvailability.appendChild(block);
+        });
+    }
+
+    /* ================================
+       NOTICE
+    ================================= */
+
+    function renderNotice() {
+        noticeInputs.innerHTML = "";
+
+        if (noticeMode.value === "hours") {
+            let hr = document.createElement("select");
+            fillSelect(hr, 23);
+            let min = document.createElement("select");
+            fillSelect(min, 59);
+            noticeInputs.appendChild(hr);
+            noticeInputs.innerHTML += "<span> horas </span>";
+            noticeInputs.appendChild(min);
+            noticeInputs.innerHTML += "<span> minutos</span>";
+        }
+
+        if (noticeMode.value === "days") {
+            let day = document.createElement("select");
+            fillSelect(day, 30);
+            noticeInputs.appendChild(day);
+            noticeInputs.innerHTML += "<span> días</span>";
+        }
+    }
+
+    noticeMode.addEventListener("change", renderNotice);
+    renderNotice();
+
+    /* ================================
+       PRECIO
+    ================================= */
+
+    paidToggle.addEventListener("change", () => {
+        if (paidToggle.checked) {
+            priceSection.classList.remove("hidden");
+        } else {
+            priceSection.classList.add("hidden");
+        }
+    });
+
+    /* ================================
+       GUARDAR EVENTO
+    ================================= */
+
+   function saveEvent() {
+
+    const name = nameInput.value.trim();
+
+    if (!name) {
+        alert("El nombre del evento es obligatorio");
+        return;
+    }
+
+    if (!eventType.value) {
+        alert("Debes seleccionar un tipo de evento");
+        return;
+    }
+
+    const durationText = durationMode.options[durationMode.selectedIndex].text;
+
+    const eventData = {
+        name: name,
+        duration: durationText,
+        location: eventType.value,
+        description: descriptionInput.value
+    };
+
+    if (isEditMode) {
+        events[editIndex] = eventData;
+    } else {
+        events.push(eventData);
+    }
+
+    localStorage.setItem("eventTypes", JSON.stringify(events));
+
+    formChanged = false;
+
+    window.location.href = "event-types.html";
+}
+
+    /* ================================
+       CANCELAR
+    ================================= */
+
+    function cancelForm() {
+        if (formChanged) {
+            const confirmExit = confirm("Tienes cambios sin guardar. ¿Seguro que quieres salir?");
+            if (!confirmExit) return;
+        }
+
+        window.location.href = "event-types.html";
+    }
+
+    cancelBtn.addEventListener("click", cancelForm);
+    saveBtn.addEventListener("click", saveEvent);
+
+    /* ================================
+       BLOQUEAR SALIDA NAVEGADOR
+    ================================= */
+
+    window.addEventListener("beforeunload", function (e) {
+        if (!formChanged) return;
+        e.preventDefault();
+        e.returnValue = "";
+    });
+
+    /* ================================
+       BLOQUEAR SIDEBAR
+    ================================= */
+
+    document.querySelectorAll(".menu-item").forEach(link => {
+        link.addEventListener("click", function (e) {
+
+            if (!this.getAttribute("href")) return;
+
+            if (formChanged) {
+                const confirmExit = confirm("Tienes cambios sin guardar. ¿Seguro que quieres salir?");
+                if (!confirmExit) {
+                    e.preventDefault();
+                }
+            }
+
+        });
+    });
+loadEventForEdit();
+</script>
 
 </body>
 </html>
